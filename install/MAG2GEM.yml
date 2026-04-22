@@ -1,0 +1,13 @@
+# environment.yml
+name: mag2gem_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.10
+  - bioconda::carveme
+  - conda-forge::cobra
+  - pip
+  - pip:
+    - cplex

@@ -18,7 +18,9 @@ We provide an automated installation script to set up the main Python environmen
 ### Clone the repository
 ```bash
 git clone [https://github.com/Lishijiagg/MAG2GEM.git](https://github.com/Lishijiagg/MAG2GEM.git)
-cd MAG2GEM
+cd MAG2GEM/install
+chmod +x install.sh
+./install.sh
 
 ## Quick Start
 
