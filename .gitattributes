@@ -1,0 +1,7 @@
+*.html linguist-detectable=false
+
+*.js linguist-detectable=false
+*.css linguist-detectable=false
+
+# output/* linguist-generated
+# docs/* linguist-documentation
