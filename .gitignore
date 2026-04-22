@@ -1,0 +1,19 @@
+# .gitignore
+
+*_tmp*/
+*.out
+*.err
+
+*.faa
+*.fna
+*.fasta
+*.xml
+*.RDS
+*.tbl
+*.csv
+*.gz
+!example_data/*
+
+__pycache__/
+*.pyc
+.DS_Store
