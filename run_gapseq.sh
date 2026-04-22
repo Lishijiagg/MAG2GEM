@@ -9,7 +9,6 @@
 #SBATCH --output=gem_pipeline_%j.out
 #SBATCH --error=gem_pipeline_%j.err
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=zez26har@nbi.ac.uk
 
 source ~/.bashrc
 micromamba activate gapseq
