@@ -62,6 +62,7 @@ Once your paths and engine preferences are set, submit the script to your SLURM 
 
 ```bash
 sbatch run_MAG2GEM.sh
+```
 
 ## Command-Line Arguments
 
