@@ -84,4 +84,4 @@ If you wish to run the Python script (`MAG2GEM_v2.py`) directly or build your ow
 | :--- | :---: | :--- | :--- |
 | `-b`, `--builder` | No | `carveme` | Choose the model building engine. Options: `carveme` or `gapseq`. |
 | `--gapseq_path` | **Conditional** | `None` | **Required if `-b gapseq` is selected.** Absolute path to your gapseq installation folder. |
-| `--gapseq_env` | No | `gapseq` | Name of the micromamba/conda environment where `gapseq` is installed. |
+| `--gapseq_env` | **Conditional** | `gapseq` | Name of the micromamba/conda environment where `gapseq` is installed. |
