@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=hybrid_gem_test
+#SBATCH --job-name=MAG2GEM_pipeline
 #SBATCH --partition=nbi-compute
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -11,12 +11,12 @@
 #SBATCH --mail-type=END,FAIL
 
 source ~/.bashrc
-micromamba activate gapseq
+micromamba activate CarveMe_stable
 
 # ================================================
 # Temporal directory setup
 # ================================================
-export TMPDIR="/qib/scratch/users/${USER}/gapseq_tmp_${SLURM_JOB_ID}"
+export TMPDIR="/qib/scratch/users/${USER}/mag2gem_tmp_${SLURM_JOB_ID}"
 mkdir -p "${TMPDIR}"
 echo "[INFO] Temp directory: ${TMPDIR}"
 
@@ -26,9 +26,10 @@ echo "[INFO] Temp directory: ${TMPDIR}"
 MASTER_SEQ="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/compl.incompl.95.prot.faa"
 MAP_TABLE="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/Bin_SB/LOGandSUB/MAGvsGC.txt.gz"
 
-XML_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/GEMs"
-FASTA_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/Extracted_MAGs"
+XML_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/GEMs_Output"
+FASTA_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/Extracted_MAGs_Output"
 
+# If no eggnog annotation, set EGGNOG_FILE=""
 EGGNOG_FILE="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/Anno/Func/emapper/MF.emapper.annotations.gz"
 
 GAPSEQ_PATH="/hpc-home/zez26har/software/gapseq"
@@ -38,13 +39,13 @@ SCRIPT_DIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test"
 SCRIPT_NAME="MAG2GEM_v2.py"
 
 # ================================================
-# Create output directoires if they don't exist
+# Create output directories if they don't exist
 # ================================================
 mkdir -p ${XML_OUTDIR}
 mkdir -p ${FASTA_OUTDIR}
 
 echo "=========================================="
-echo "Starting Hybrid Pipeline Job"
+echo "Starting MAG2GEM Pipeline Job"
 echo "Start time:      $(date)"
 echo "Job ID:          ${SLURM_JOB_ID}"
 echo "Node:            $(hostname)"
@@ -57,25 +58,43 @@ echo "=========================================="
 
 cd ${SCRIPT_DIR}
 
-CMD="python ${SCRIPT_NAME} \
+# Optional eggnog arguments
+EGGNOG_ARG=""
+if [ -n "${EGGNOG_FILE}" ]; then
+    EGGNOG_ARG="-e ${EGGNOG_FILE}"
+fi
+
+# ================================================
+# Execution Logic (Choose your engine)
+# ================================================
+
+# ------------------------------------------------
+# OPTION A: CarveMe Engine (Current Active)
+# ------------------------------------------------
+echo "[INFO] Executing CarveMe Pipeline..."
+python ${SCRIPT_NAME} \
     -s ${MASTER_SEQ} \
     -t ${MAP_TABLE} \
     -o ${XML_OUTDIR} \
     -f ${FASTA_OUTDIR} \
-    -c 4 \
-    -b gapseq \
-    --gapseq_path ${GAPSEQ_PATH} \
-    --gapseq_env ${GAPSEQ_ENV}"
+    ${EGGNOG_ARG} \
+    -c 16 \
+    -b carveme
 
-if [ -n "${EGGNOG_FILE}" ]; then
-    CMD="${CMD} -e ${EGGNOG_FILE}"
-fi
-
-echo "Executing:"
-echo "${CMD}"
-echo "=========================================="
-
-eval ${CMD}
+# ------------------------------------------------
+# OPTION B: gapseq Engine (Currently Commented Out)
+# ------------------------------------------------
+# echo "[INFO] Executing gapseq Pipeline..."
+# python ${SCRIPT_NAME} \
+#     -s ${MASTER_SEQ} \
+#     -t ${MAP_TABLE} \
+#     -o ${XML_OUTDIR} \
+#     -f ${FASTA_OUTDIR} \
+#     ${EGGNOG_ARG} \
+#     -c 4 \
+#     -b gapseq \
+#     --gapseq_path ${GAPSEQ_PATH} \
+#     --gapseq_env ${GAPSEQ_ENV}
 
 echo "=========================================="
 echo "Pipeline finished at $(date)"
