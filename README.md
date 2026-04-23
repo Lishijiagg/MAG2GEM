@@ -17,7 +17,7 @@ Ensure the following dependencies are installed in your environment:
 > **IMPORTANT: Environment Separation**
 > Because CarveMe and `gapseq` rely on vastly different underlying software dependencies and system libraries, installing them in the same Conda environment will likely cause severe version conflicts and broken configurations. 
 > * It is highly recommended to install these two tools in **two separate environments**.
-> * Our automated `install.sh` script (detailed below) will set up the primary environment containing **CarveMe**, COBRApy, and the MAG2GEM wrapper. 
+> * Our automated `install.sh` script (detailed below) will set up the primary environment containing CarveMe, COBRApy, and the MAG2GEM wrapper. 
 > * If you intend to use the `gapseq` engine, please install it in its own dedicated environment.
 > 
 > **Official Installation Guides:**
