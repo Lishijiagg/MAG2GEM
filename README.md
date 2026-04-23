@@ -21,8 +21,8 @@ Ensure the following dependencies are installed in your environment:
 > * If you intend to use the `gapseq` engine, please install it in its own dedicated environment.
 > 
 > **Official Installation Guides:**
-> * [Official CarveMe Documentation](https://github.com/cdanielmachado/carveme)
-> * [Official gapseq Documentation](https://github.com/jotech/gapseq)
+> * [CarveMe](https://github.com/cdanielmachado/carveme)
+> * [gapseq](https://github.com/jotech/gapseq)
 
 We provide an automated installation script to set up the main Python environment (including CarveMe and COBRApy) via Conda/Micromamba.
 
