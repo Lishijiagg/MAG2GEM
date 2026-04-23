@@ -62,3 +62,25 @@ Once your paths and engine preferences are set, submit the script to your SLURM 
 
 ```bash
 sbatch run_MAG2GEM.sh
+
+## Command-Line Arguments
+
+If you wish to run the Python script (`MAG2GEM_v2.py`) directly or build your own wrapper, here is the complete list of supported parameters.
+
+### Core Arguments
+| Argument | Required | Default | Description |
+| :--- | :---: | :--- | :--- |
+| `-s`, `--master_seq` | **Yes** | - | Path to the master sequence file containing all protein sequences. |
+| `-t`, `--table` | **Yes** | - | Path to the mapping table linking MAGs to their gene IDs and taxonomic domains. |
+| `-o`, `--outdir` | **Yes** | - | Output directory for the final constructed `.xml` (SBML) models. |
+| `-f`, `--fasta_outdir`| **Yes** | - | Output directory where extracted individual MAG `.faa` files will be saved. |
+| `-c`, `--cpus` | No | *SLURM allocation* | Number of concurrent tasks (MAGs processing in parallel). |
+| `-n`, `--limit` | No | `None` | Limit the number of MAGs to process. Highly useful for quick testing. |
+| `-e`, `--eggnog` | No | `None` | Path to the master `emapper.annotations` file to inject KEGG/EC/PFAM/COG tags into the final models. |
+
+### Builder Selection & gapseq Configuration
+| Argument | Required | Default | Description |
+| :--- | :---: | :--- | :--- |
+| `-b`, `--builder` | No | `carveme` | Choose the model building engine. Options: `carveme` or `gapseq`. |
+| `--gapseq_path` | **Conditional** | `None` | **Required if `-b gapseq` is selected.** Absolute path to your gapseq installation folder. |
+| `--gapseq_env` | No | `gapseq` | Name of the micromamba/conda environment where `gapseq` is installed. |
