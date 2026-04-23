@@ -11,6 +11,7 @@
 #SBATCH --mail-type=END,FAIL
 
 source ~/.bashrc
+export PYTHONNOUSERSITE=1
 micromamba activate CarveMe_stable
 
 # ================================================
@@ -79,7 +80,6 @@ fi
 #     -f ${FASTA_OUTDIR} \
 #     ${EGGNOG_ARG} \
 #     -c 16 \
-#     -n 3 \
 #     -b carveme
 
 # ------------------------------------------------
@@ -93,7 +93,6 @@ fi
      -f ${FASTA_OUTDIR} \
      ${EGGNOG_ARG} \
      -c 4 \
-     -n 3 \
      -b gapseq \
      --gapseq_path ${GAPSEQ_PATH} \
      --gapseq_env ${GAPSEQ_ENV}
