@@ -23,18 +23,31 @@ chmod +x install.sh
 ./install.sh
 ```
 
-## Quick Start
+## Quick Start (HPC / SLURM)
 
-### CarveMe Mode (High Speed - Default)
-Ideal for processing hundreds or thousands of MAGs quickly with low memory footprint. High concurrency is safe to use.
+For High-Performance Computing (HPC) environments, we provide a ready-to-use SLURM submission script: `run_MAG2GEM.sh`. This script automatically handles temporary directories, resource allocation, and execution logic.
+
+### Step 1: Configure Your Paths
+Open `run_MAG2GEM.sh` with a text editor (e.g., `nano run_MAG2GEM.sh`) and update the `Path setup` section to match your actual files and desired output directories:
+* `MASTER_SEQ`: Path to your concatenated `.faa` file.
+* `MAP_TABLE`: Path to your mapping `.tsv` or `.txt.gz` file.
+* `EGGNOG_FILE`: Path to your eggNOG annotations (leave empty `""` if not needed).
+
+### Step 2: Choose Your Engine (CarveMe vs. gapseq)
+The pipeline features a dual-engine architecture. Scroll to the bottom of the `run_MAG2GEM.sh` script to the **Execution Logic** section. You can easily switch engines by commenting (`#`) or uncommenting the code blocks:
+
+**Option A: CarveMe Mode (Default)**
+* **Best for**: Ultra-fast processing of large MAG datasets with a low memory footprint.
+* **How to use**: Ensure the Option A block is active (uncommented).
+* **Concurrency**: Safe to set high (e.g., `-c 16`, matching your requested SLURM CPUs).
+
+**Option B: gapseq Mode**
+* **Best for**: High-detail metabolic reconstruction, strict gap-filling, and growth media prediction.
+* **How to use**: Comment out Option A, and uncomment the Option B block. Ensure `--gapseq_path` is correctly set.
+* **CRITICAL**: `gapseq` is extremely memory-intensive. Please allocate sufficient memory
+
+### Step 3: Submit the Job
+Once your paths and engine preferences are set, submit the script to your SLURM cluster:
 
 ```bash
-python src/MAG2GEM_v2.py \
-  -s master.fasta \
-  -t mapping.tsv \
-  -o ./models_carveme \
-  -f ./mags \
-  -e eggnog.tsv.gz \
-  -c 16 \
-  -b carveme
-```
+sbatch run_MAG2GEM.sh
