@@ -21,6 +21,7 @@ git clone [https://github.com/Lishijiagg/MAG2GEM.git](https://github.com/Lishiji
 cd MAG2GEM/install
 chmod +x install.sh
 ./install.sh
+```
 
 ## Quick Start
 
@@ -36,3 +37,4 @@ python src/MAG2GEM_v2.py \
   -e eggnog.tsv.gz \
   -c 16 \
   -b carveme
+```
