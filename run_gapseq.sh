@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=MAG2GEM_pipeline
+#SBATCH --job-name=hybrid_gem_test
 #SBATCH --partition=nbi-compute
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
@@ -26,10 +26,9 @@ echo "[INFO] Temp directory: ${TMPDIR}"
 MASTER_SEQ="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/compl.incompl.95.prot.faa"
 MAP_TABLE="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/Bin_SB/LOGandSUB/MAGvsGC.txt.gz"
 
-XML_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/GEMs_Output_gapseq"
-FASTA_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/Extracted_MAGs_Output_gapseq"
+XML_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/GEMs_CarveME"
+FASTA_OUTDIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test/Extracted_MAGs_CarveME"
 
-# If no eggnog annotation, set EGGNOG_FILE=""
 EGGNOG_FILE="/qib/research-projects/fmh_RYpersistence/RY_results2/RYdata/genecat/Anno/Func/emapper/MF.emapper.annotations.gz"
 
 GAPSEQ_PATH="/hpc-home/zez26har/software/gapseq"
@@ -39,7 +38,7 @@ SCRIPT_DIR="/hpc-home/zez26har/MAGs2GEMs/gapseq_test"
 SCRIPT_NAME="MAG2GEM_v2.py"
 
 # ================================================
-# Create output directories if they don't exist
+# Create output directoires if they don't exist
 # ================================================
 mkdir -p ${XML_OUTDIR}
 mkdir -p ${FASTA_OUTDIR}
@@ -57,46 +56,27 @@ echo "Output models:   ${XML_OUTDIR}"
 echo "=========================================="
 
 cd ${SCRIPT_DIR}
+# If want to use gapseq
+# GAPSEQ_ARGs="--gapseq_path ${GAPSEQ_PATH} --gapseq_env ${GAPSEQ_ENV}"
 
-# Optional eggnog arguments
-EGGNOG_ARG=""
+CMD="python ${SCRIPT_NAME} \
+    -s ${MASTER_SEQ} \
+    -t ${MAP_TABLE} \
+    -o ${XML_OUTDIR} \
+    -f ${FASTA_OUTDIR} \
+    -c 16 \
+    -b carveme \
+    ${GAPSEQ_ARGs}"
+
 if [ -n "${EGGNOG_FILE}" ]; then
-    EGGNOG_ARG="-e ${EGGNOG_FILE}"
+    CMD="${CMD} -e ${EGGNOG_FILE}"
 fi
 
-# ================================================
-# Execution Logic (Choose your engine)
-# ================================================
+echo "Executing:"
+echo "${CMD}"
+echo "=========================================="
 
-# ------------------------------------------------
-# OPTION A: CarveMe Engine (Current Active)
-# ------------------------------------------------
-# echo "[INFO] Executing CarveMe Pipeline..."
-# python ${SCRIPT_NAME} \
-#     -s ${MASTER_SEQ} \
-#     -t ${MAP_TABLE} \
-#     -o ${XML_OUTDIR} \
-#     -f ${FASTA_OUTDIR} \
-#     ${EGGNOG_ARG} \
-#     -c 16 \
-#     -n 3 \
-#     -b carveme
-
-# ------------------------------------------------
-# OPTION B: gapseq Engine (Currently Commented Out)
-# ------------------------------------------------
- echo "[INFO] Executing gapseq Pipeline..."
- python ${SCRIPT_NAME} \
-     -s ${MASTER_SEQ} \
-     -t ${MAP_TABLE} \
-     -o ${XML_OUTDIR} \
-     -f ${FASTA_OUTDIR} \
-     ${EGGNOG_ARG} \
-     -c 4 \
-     -n 3 \
-     -b gapseq \
-     --gapseq_path ${GAPSEQ_PATH} \
-     --gapseq_env ${GAPSEQ_ENV}
+eval ${CMD}
 
 echo "=========================================="
 echo "Pipeline finished at $(date)"
