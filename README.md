@@ -13,6 +13,17 @@ Ensure the following dependencies are installed in your environment:
 * `cplex` (Highly recommended for maximum speed and resolving complex gap-filling)
 
 ## Installation
+
+> **IMPORTANT: Environment Separation**
+> Because CarveMe and `gapseq` rely on vastly different underlying software dependencies and system libraries, installing them in the same Conda environment will likely cause severe version conflicts and broken configurations. 
+> * It is highly recommended to install these two tools in **two separate environments**.
+> * Our automated `install.sh` script (detailed below) will set up the primary environment containing **CarveMe**, COBRApy, and the MAG2GEM wrapper. 
+> * If you intend to use the `gapseq` engine, please install it in its own dedicated environment.
+> 
+> **Official Installation Guides:**
+> * [Official CarveMe Documentation](https://github.com/cdanielmachado/carveme)
+> * [Official gapseq Documentation](https://github.com/jotech/gapseq)
+
 We provide an automated installation script to set up the main Python environment (including CarveMe and COBRApy) via Conda/Micromamba.
 
 ### Clone the repository
